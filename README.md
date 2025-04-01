@@ -1,4 +1,4 @@
-"Nom à trouver"
+"Localia"
 
 Site E-Commerce Sobre : 
 On vend des produits fait main et durable, fabrication respectant l'écologie, textile, déco, meublé.
