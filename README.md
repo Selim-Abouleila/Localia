@@ -18,6 +18,7 @@ Backend :
 
 BDD : 
     - mySqlWorkBench
+    - PHPmyAdmin : http://localhost/phpmyadmin
 
 Lancement du serveur : 
     - npm run dev
