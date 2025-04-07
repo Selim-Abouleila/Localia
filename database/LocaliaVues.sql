@@ -1,5 +1,24 @@
 /*View all products */
 
+CREATE VIEW view_inventory AS
+SELECT 
+    i.id_inventory,
+    i.stock,
+    p.id_produit,
+    p.product_name,
+    p.product_type,
+    p.price
+FROM Inventory i
+JOIN Product p ON i.id_produit = p.id_produit;
+
+CREATE VIEW view_logs AS
+SELECT 
+    id_log,
+    message,
+    log_date
+FROM Log
+ORDER BY log_date DESC;
+
 CREATE OR REPLACE VIEW view_all_products AS
 SELECT 
     id_produit,

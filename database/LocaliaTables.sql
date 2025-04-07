@@ -13,6 +13,7 @@ CREATE TABLE Client (
     role VARCHAR(50)
 );
 
+
 -- Create the Product table
 CREATE TABLE Product (
     id_produit INT AUTO_INCREMENT PRIMARY KEY,
@@ -78,3 +79,7 @@ CREATE TABLE Inventory (
     id_produit INT,
     FOREIGN KEY (id_produit) REFERENCES Product(id_produit)
 );
+
+SHOW TRIGGERS;
+
+
