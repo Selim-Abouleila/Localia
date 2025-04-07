@@ -5,6 +5,9 @@ const app = express();
 // Pour les variables d'environnement (ex: PORT)
 require('dotenv').config();
 
+// Connexion a la database
+const db = require('./config/db'); // Charge la connexion automatiquement
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware pour lire les données des formulaires (POST)
