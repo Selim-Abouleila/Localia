@@ -1,8 +1,20 @@
 "Localia"
 
 Site E-Commerce Sobre : 
-On vend des produits fait main et durable, fabrication respectant l'écologie, textile, déco, meublé.
+On vend des produits faits main et durables, fabrication qui respecte l'écologie : textiles, déco, meubles.
 
-Possibilité d'avoir un panier, de liker des objets, de les acheter.
+Fonctionnalites : 
+    - Authentification (admin/user)
+    - Panier et paiement
+    - Likes
+    - Recherche/filtrage d'articles
+    - Gestion de produits (admin)
 
-Utilisateur : admin, régulier
+Frontend :
+    - HTML/CSS
+
+Backend :
+    - Node.js + Express.js
+
+BDD : 
+    - mySqlWorkBench
