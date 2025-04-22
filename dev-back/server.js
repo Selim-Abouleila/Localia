@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Route de base
 app.get('/', (req, res) => {
-  res.send('Bienvenue sur le serveur Green Crafts 🌿');
+  res.send('Bienvenue sur le serveur Localia 🌿');
 });
 
 // Lancer le serveur
