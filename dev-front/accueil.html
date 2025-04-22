@@ -3,21 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil</title>
+  <title>Accueil - Localia</title>
+  <link rel="stylesheet" href="html.css"> <!-- Lien vers le fichier CSS -->
 </head>
 <body>
-
+  <!-- En-tête de navigation -->
   <header>
-    <h1>Accueil</h1>
+    <nav>
+      <ul>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="about.html">About us</a></li>
+        <li><a href="produits.html">Produits</a></li>
+        <li><a href="panier.html">Panier</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <main>
-    <p>Ceci est une page HTML de base.</p>
-  </main>
+  <!-- Section principale (Hero) -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Des produits faits mains écologiques et durables</h1>
+      <p>Découvrez des créations artisanales et respectueuses de l'environnement</p>
+      <a href="produits.html" class="btn-primary">Découvrir nos produits</a>
+    </div>
+  </section>
+
+  <!-- Section des partenaires -->
+  <section class="partenaires">
+    <h2>Nos Partenaires</h2>
+    <p>Nos partenaires partagent notre engagement pour l'artisanat durable et respectueux de la nature.</p>
+    <div class="partenaires-logos">
+      <img src="logo-bookers.png" alt="Bookers" class="logo">
+      <img src="logo-leaf-hotels.png" alt="Leaf Hotels" class="logo">
+      <img src="logo-ecoliday.png" alt="Ecoliday" class="logo">
+      <img src="logo-naturloop.png" alt="Naturloop" class="logo">
+    </div>
+  </section>
+
+  <!-- Section sélection de produits -->
+  <section class="produits-selection">
+    <h2>Une large sélection de produits artisanaux et durables</h2>
+    <p>Découvrez nos créations uniques fabriquées à la main, alliant esthétique et respect de l'environnement.</p>
+    <div class="produits-cards">
+      <!-- Exemple de carte produit -->
+      <div class="produit-card">
+        <img src="artisanat-textile.jpg" alt="Artisanat textile">
+        <div class="produit-card-content">
+          <h3>Artisanat textile</h3>
+          <p>Reconnectez-vous à la nature avec nos produits</p>
+          <a href="produits.html" class="btn">Voir plus</a>
+        </div>
+      </div>
+      <!-- Ajouter d'autres cartes ici -->
+    </div>
+  </section>
+
+  <!-- Section Explorer les produits -->
+  <section class="explore-produits">
+    <h2>Explorez nos produits faits main pour chaque pièce de votre maison</h2>
+    <p>Des créations artisanales pour ceux qui cherchent la simplicité et le respect de l'environnement.</p>
+    <div class="explore-btns">
+      <a href="produits.html" class="btn-primary">Découvrir nos produits</a>
+      <a href="offres-speciales.html" class="btn-secondary">Offres spéciales</a>
+    </div>
+  </section>
+
+  <!-- Section Certifications -->
+  <section class="certifications">
+    <h2>Nos certifications</h2>
+    <p>Certifiés éco-responsables, nous garantissons des produits respectueux de l'environnement à chaque étape de leur création.</p>
+    <div class="certification-logos">
+      <img src="green-energy-logo.png" alt="Green Energy" class="certification-logo">
+      <img src="100-ecology-logo.png" alt="100% Ecology" class="certification-logo">
+      <img src="green-energy-seal.png" alt="Green Energy Seal" class="certification-logo">
+    </div>
+  </section>
+
+  <!-- Section Contactez-nous -->
+  <section class="contact">
+    <div class="contact-form">
+      <h2>Contactez-nous</h2>
+      <p>Pour toute question ou demande, n'hésitez pas à nous contacter. Nous sommes là pour vous aider.</p>
+      <form action="#" method="POST">
+        <label for="name">Nom</label>
+        <input type="text" id="name" name="name" placeholder="Entrez votre nom" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Écrivez votre message..." required></textarea>
+
+        <div class="conditions">
+          <input type="checkbox" id="conditions" required>
+          <label for="conditions">J'accepte les Conditions Générales*</label>
+        </div>
+
+        <button type="submit" class="btn-primary">Envoyer</button>
+      </form>
+    </div>
+
+    <div class="contact-image">
+      <img src="lake-house.jpg" alt="Image de maison près du lac">
+    </div>
+  </section>
 
   <footer>
-    <p>&copy; 2025 MonSiteWeb</p>
+    <p>&copy; 2025 Localia. Tous droits réservés.</p>
   </footer>
-
 </body>
 </html>

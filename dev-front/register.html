@@ -3,21 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>S'inscrire</title>
+  <title>S'inscrire - Localia</title>
+  <link rel="stylesheet" href="register.css"> <!-- Lien vers le fichier CSS -->
 </head>
 <body>
+  <div class="signup-container">
+    <div class="signup-content">
+      <h1>S'inscrire</h1>
+      <p>Inscrivez-vous pour profiter de Localia</p>
 
-  <header>
-    <h1>S'inscrire</h1>
-  </header>
+      <form action="#" method="POST">
+        <label for="name">Nom & Prénom</label>
+        <input type="text" id="name" name="name" placeholder="Entrez votre nom et prénom" required>
 
-  <main>
-    <p>Ceci est une page HTML de base.</p>
-  </main>
+        <label for="birthdate">Date de naissance</label>
+        <input type="date" id="birthdate" name="birthdate" required>
 
-  <footer>
-    <p>&copy; 2025 MonSiteWeb</p>
-  </footer>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
 
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+
+        <button type="submit" class="btn-signup">S'inscrire</button>
+      </form>
+
+      <p>Vous avez déjà un compte ? <a href="login.html">Connectez-vous</a></p>
+    </div>
+
+    <!-- Section image de fond -->
+    <div class="signup-image">
+      <img src="background-image.jpg" alt="Nature écologique" />
+    </div>
+  </div>
 </body>
 </html>
+

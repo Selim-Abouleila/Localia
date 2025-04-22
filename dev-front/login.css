@@ -1,0 +1,107 @@
+  /*PAge connexion*/
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+  }
+  
+  h1, p {
+    color: #2e8b57; /* Couleur verte pour rappeler l'aspect écologique */
+  }
+  
+  /* Container principal de la page de connexion */
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f1f1f1;
+  }
+  
+  .login-content {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+  }
+  
+  .login-content h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .login-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .login-content label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+  }
+  
+  .login-content input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  .login-content .checkbox {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .login-content .checkbox input {
+    margin-right: 10px;
+  }
+  
+  .btn-login {
+    width: 100%;
+    background-color: #28a745; /* Couleur verte écologique */
+    color: white;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-login:hover {
+    background-color: #218838;
+  }
+  
+  .login-content p a {
+    color: #28a745;
+    text-decoration: none;
+  }
+  
+  .login-content p a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Section d'image à droite */
+  .login-image {
+    width: 50%;
+    background-color: #e9f5e0;
+  }
+  
+  .login-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }

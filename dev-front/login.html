@@ -3,21 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Se connecter</title>
+  <title>Connexion - Localia</title>
+  <link rel="stylesheet" href="login.css"> <!-- Lien vers le fichier CSS -->
 </head>
 <body>
+  <div class="login-container">
+    <div class="login-content">
+      <h1>Connectez-vous</h1>
+      <p>Veuillez vous connecter pour continuer sur votre compte.</p>
 
-  <header>
-    <h1>Se connecter</h1>
-  </header>
+      <form action="#" method="POST">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Entrez votre email" required>
 
-  <main>
-    <p>Ceci est une page HTML de base.</p>
-  </main>
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
 
-  <footer>
-    <p>&copy; 2025 MonSiteWeb</p>
-  </footer>
+        <div class="checkbox">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember">Rester connecté</label>
+        </div>
 
+        <button type="submit" class="btn-login">Se connecter</button>
+      </form>
+
+      <p>Besoin d'un compte ? <a href="register.css">Créez-en un</a></p>
+    </div>
+
+    <!-- Section image de fond -->
+    <div class="login-image">
+      <img src="background-image.jpg" alt="Nature écologique" />
+    </div>
+  </div>
 </body>
 </html>
