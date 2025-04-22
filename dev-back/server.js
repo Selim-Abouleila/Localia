@@ -40,20 +40,28 @@ app.post('/api/login', (req, res) => {
     return res.status(400).json({ success: false, message: 'Champs manquants' });
   }
 
-  const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
-  db.query(sql, [email, password], (err, results) => {
+  const sql = 'SELECT * FROM Client WHERE email = ?';
+  db.query(sql, [email], async (err, results) => {
     if (err) {
       console.error('Erreur MySQL :', err);
       return res.status(500).json({ success: false, message: 'Erreur serveur' });
     }
 
-    if (results.length > 0) {
-      res.json({ success: true, message: 'Connexion réussie ✅' });
-    } else {
-      res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect ❌' });
+    if (results.length === 0) {
+      return res.status(401).json({ success: false, message: 'Email non trouvé ❌' });
     }
+
+    const user = results[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Mot de passe incorrect ❌' });
+    }
+
+    res.json({ success: true, message: 'Connexion réussie ✅', user: { id: user.id_client, username: user.username, role: user.role } });
   });
 });
+
 
 app.post('/api/register', async (req, res) => {
   const { username, email, password } = req.body;
