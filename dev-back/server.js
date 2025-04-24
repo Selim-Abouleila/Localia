@@ -288,29 +288,132 @@ app.post('/api/commande', (req, res) => {
 
         const id_commande = result.insertId;
 
-        // 4. Insérer chaque produit dans la table involves
-        const sqlInvolves = 'INSERT INTO involves (id_commande, id_produit, quantity, price) VALUES ?';
-        const valeurs = produits.map(p => [id_commande, p.id_produit, p.quantity, 0]); // prix = 0 pour l’instant, ou tu peux faire un JOIN pour le vrai prix
+        // 4. Aller chercher les prix des produits
+        const idsProduits = produits.map(p => p.id_produit);
+        const sqlPrix = `SELECT id_produit, price FROM product WHERE id_produit IN (${idsProduits.map(() => '?').join(',')})`;
 
-        db.query(sqlInvolves, [valeurs], (err) => {
+        db.query(sqlPrix, idsProduits, (err, prixResult) => {
           if (err) {
-            return res.status(500).json({ success: false, message: 'Erreur lors de l’ajout des produits à la commande.' });
+            return res.status(500).json({ success: false, message: 'Erreur récupération prix.' });
           }
 
-          // 5. Vider le panier
-          const sqlViderPanier = 'DELETE FROM has WHERE id_panier = ?';
-          db.query(sqlViderPanier, [id_panier], (err) => {
+          // Associer prix à chaque ligne du panier
+          const prixMap = {};
+          prixResult.forEach(p => prixMap[p.id_produit] = p.price);
+
+          const valeurs = produits.map(p => [
+            id_commande,
+            p.id_produit,
+            p.quantity,
+            prixMap[p.id_produit] || 0
+          ]);
+
+          const sqlInvolves = 'INSERT INTO involves (id_commande, id_produit, quantity, price) VALUES ?';
+          db.query(sqlInvolves, [valeurs], (err) => {
             if (err) {
-              return res.status(500).json({ success: false, message: 'Commande validée, mais erreur lors du vidage du panier.' });
+              return res.status(500).json({ success: false, message: 'Erreur lors de l’ajout des produits à la commande.' });
             }
 
-            res.json({ success: true, message: 'Commande validée avec succès ✅' });
+            // 5. Vider le panier
+            const sqlViderPanier = 'DELETE FROM has WHERE id_panier = ?';
+            db.query(sqlViderPanier, [id_panier], (err) => {
+              if (err) {
+                return res.status(500).json({ success: false, message: 'Commande validée, mais erreur lors du vidage du panier.' });
+              }
+
+              res.json({ success: true, message: 'Commande validée avec succès ✅' });
+            });
           });
         });
       });
     });
   });
 });
+
+// API : Récupérer l'historique des commandes du client connecté
+app.get('/api/commandes', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ success: false, message: 'Vous devez être connecté.' });
+  }
+
+  const id_client = req.session.user.id;
+
+  // Requête : commandes + produits liés
+  const sql = `
+    SELECT c.id_commande, c.Order_date, c.Status,
+           p.product_name, i.quantity, i.price
+    FROM commande c
+    JOIN involves i ON c.id_commande = i.id_commande
+    JOIN product p ON i.id_produit = p.id_produit
+    WHERE c.id_client = ?
+    ORDER BY c.Order_date DESC
+  `;
+
+  db.query(sql, [id_client], (err, results) => {
+    if (err) {
+      console.error('Erreur récupération commandes :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+    }
+
+    // Regrouper par commande
+    const commandes = {};
+    results.forEach(row => {
+      const id = row.id_commande;
+      if (!commandes[id]) {
+        commandes[id] = {
+          id_commande: id,
+          date: row.Order_date,
+          status: row.Status,
+          produits: [],
+          total: 0
+        };
+      }
+
+      const totalProduit = row.quantity * row.price;
+      commandes[id].produits.push({
+        nom: row.product_name,
+        quantity: row.quantity,
+        prix: row.price,
+        total: totalProduit
+      });
+
+      commandes[id].total += totalProduit;
+    });
+
+    res.json({ success: true, commandes: Object.values(commandes) });
+  });
+});
+app.post('/api/commande/:id/valider', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ success: false, message: 'Non connecté' });
+  }
+
+  const id_client = req.session.user.id;
+  const id_commande = req.params.id;
+
+  // Vérifier que la commande appartient bien à ce client et est en attente
+  const checkSQL = `SELECT * FROM commande WHERE id_commande = ? AND id_client = ? AND Status = 'en attente'`;
+  db.query(checkSQL, [id_commande, id_client], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Erreur lors de la vérification de la commande.' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(403).json({ success: false, message: 'Commande introuvable ou déjà finalisée.' });
+    }
+
+    // Mettre à jour le statut
+    const updateSQL = `UPDATE commande SET Status = 'validée' WHERE id_commande = ?`;
+    db.query(updateSQL, [id_commande], (err) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour de la commande.' });
+      }
+
+      res.json({ success: true, message: 'Commande validée avec succès ✅' });
+    });
+  });
+});
+
 // Lancer le serveur
 app.listen(PORT, () => {
   console.log(`✅ Serveur lancé sur http://localhost:${PORT}`);
