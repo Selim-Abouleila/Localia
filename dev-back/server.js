@@ -4,17 +4,30 @@ const app = express();
 const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 const saltRounds = 10;
 require('dotenv').config();
 
 const db = require('./config/db'); // Connexion MySQL
-
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(session({
+  secret: 'secretkey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 // 1 jour
+  }
+}));
 
 // Servir les fichiers HTML statiques depuis dev-front
 app.use(express.static(path.join(__dirname, '../dev-front')));
@@ -52,17 +65,24 @@ app.post('/api/login', (req, res) => {
     }
 
     const user = results[0];
-
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Mot de passe incorrect ❌' });
     }
 
-    res.json({ success: true, message: 'Connexion réussie ✅', user: { id: user.id_client, username: user.username, role: user.role } });
+    // Stocker l'utilisateur dans la session
+    req.session.user = {
+      id: user.id_client,
+      username: user.username,
+      role: user.role
+    };
+
+    res.json({ success: true, message: 'Connexion réussie ✅' });
   });
 });
 
-
+// API : Register
 app.post('/api/register', async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -70,7 +90,6 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Champs requis manquants' });
   }
 
-  // Vérifier si l'email existe déjà
   const checkEmailSQL = 'SELECT * FROM Client WHERE email = ?';
   db.query(checkEmailSQL, [email], async (err, result) => {
     if (err) return res.status(500).json({ success: false, message: 'Erreur serveur' });
@@ -79,7 +98,6 @@ app.post('/api/register', async (req, res) => {
       return res.status(409).json({ success: false, message: 'Email déjà utilisé' });
     }
 
-    // Hasher le mot de passe
     try {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -94,6 +112,26 @@ app.post('/api/register', async (req, res) => {
       res.status(500).json({ success: false, message: 'Erreur de sécurité interne' });
     }
   });
+});
+
+// API : Déconnexion
+app.get('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ success: false, message: 'Erreur lors de la déconnexion' });
+    }
+    res.clearCookie('connect.sid');
+    res.json({ success: true, message: 'Déconnecté avec succès' });
+  });
+});
+
+// API : Utilisateur connecté ?
+app.get('/api/user', (req, res) => {
+  if (req.session.user) {
+    res.json({ connected: true, user: req.session.user });
+  } else {
+    res.json({ connected: false });
+  }
 });
 
 // Lancer le serveur

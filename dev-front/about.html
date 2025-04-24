@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A propos - Localia</title>
+  <link rel="stylesheet" href="html.css">
+  <style>
+    .faq-section {
+      background-color: #f5f5f5;
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto 60px;
+      border-radius: 10px;
+    }
+    .faq-section h2 {
+      text-align: center;
+      color: #2e8b57;
+      margin-bottom: 30px;
+    }
+    .faq-item {
+      margin-bottom: 15px;
+    }
+    .faq-question {
+      background-color: #e0f2e9;
+      color: #2e8b57;
+      padding: 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .faq-answer {
+      display: none;
+      padding: 10px 15px;
+      background-color: #ffffff;
+      border-left: 4px solid #2e8b57;
+      border-radius: 0 0 5px 5px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barre de navigation -->
+  <header>
+    <nav>
+      <ul>
+        <li><a href="accueil.html" class="logo-link">
+          <img src="images/logo.jpg" alt="Logo Localia">
+        </a></li>
+        <li><a href="accueil.html">Accueil</a></li>
+        <li><a href="about.html">A propos</a></li>
+        <li><a href="login.html" id="login-link">Se connecter</a></li>
+        <li><a href="#" id="logout-link" style="display: none;">Se déconnecter</a></li>
+        <li><a href="panier.html" id="panier-link" style="display: none;">Panier</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Section Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Localia, l'artisanat au service de l'environnement</h1>
+      <p>Découvrez notre mission et notre équipe engagée pour une consommation durable</p>
+    </div>
+  </section>
+
+  <!-- À propos de nous -->
+  <section class="produits-selection">
+    <h2>Notre mission</h2>
+    <p>Chez Localia, nous croyons en une consommation plus responsable. Nous proposons des produits faits main, durables et respectueux de l'environnement : textiles, décoration, mobilier. Notre but ? Réduire l'empreinte écologique tout en soutenant les artisans locaux.</p>
+    <img src="images/Artisanat.png" alt="Produits artisanaux" style="width:80%;margin-top:20px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+  </section>
+
+  <!-- Notre équipe -->
+  <section class="produits-selection">
+    <h2>Notre équipe</h2>
+    <p>Derrière Localia, une équipe de 5 passionnés :</p>
+    <div class="produits-cards">
+      <div class="produit-card">
+        <img src="images/samy.jpeg" alt="Samy">
+        <div class="produit-card-content"><h3>Samy</h3></div>
+      </div>
+      <div class="produit-card">
+        <img src="images/yael.jpeg" alt="Yael">
+        <div class="produit-card-content"><h3>Yael</h3></div>
+      </div>
+      <div class="produit-card">
+        <img src="images/alban.jpg" alt="Alban">
+        <div class="produit-card-content"><h3>Alban</h3></div>
+      </div>
+      <div class="produit-card">
+        <img src="images/jayan.jpeg" alt="Jayan">
+        <div class="produit-card-content"><h3>Jayan</h3></div>
+      </div>
+      <div class="produit-card">
+        <img src="images/selim.jpeg" alt="Selim">
+        <div class="produit-card-content"><h3>Selim</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section FAQ -->
+  <section class="faq-section">
+    <h2>FAQ - Questions fréquentes</h2>
+    <div class="faq-item">
+      <div class="faq-question">Quels types de produits proposez-vous ?</div>
+      <div class="faq-answer">Nous proposons des articles artisanaux faits main : textiles, décoration, meubles, tous conçus dans le respect de l'environnement.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Comment garantissez-vous l'aspect écologique ?</div>
+      <div class="faq-answer">Nos produits sont issus de matériaux recyclés ou naturels, fabriqués localement par des artisans engagés. Nous limitons également les emballages plastiques.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Puis-je retourner un produit ?</div>
+      <div class="faq-answer">Oui, vous avez 14 jours pour changer d'avis. Contactez notre service client pour plus de détails.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Livrez-vous partout en France ?</div>
+      <div class="faq-answer">Absolument ! Nous livrons dans toute la France métropolitaine, et travaillons à étendre nos livraisons à l'Europe prochainement.</div>
+    </div>
+  </section>
+
+  <!-- Pied de page -->
+  <footer>
+    <p>&copy; 2025 Localia. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const answer = item.nextElementSibling;
+        answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+      });
+    });
+    fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      const loginLink = document.getElementById('login-link');
+      const logoutLink = document.getElementById('logout-link');
+      const panierLink = document.getElementById('panier-link');
+
+      if (data.connected) {
+        if (loginLink) loginLink.style.display = 'none';
+        if (logoutLink) logoutLink.style.display = 'inline-block';
+        if (panierLink) panierLink.style.display = 'inline-block';
+      } else {
+        if (loginLink) loginLink.style.display = 'inline-block';
+        if (logoutLink) logoutLink.style.display = 'none';
+        if (panierLink) panierLink.style.display = 'none';
+      }
+    });
+
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', async () => {
+      await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+      window.location.href = 'login.html';
+    });
+  }
+  </script>
+</body>
+</html>

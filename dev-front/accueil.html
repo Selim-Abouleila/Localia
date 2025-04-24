@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil - Localia</title>
-  <link rel="stylesheet" href="html.css"> <!-- Lien vers le fichier CSS -->
+  <link rel="stylesheet" href="html.css">
 </head>
 <body>
   <!-- En-tête de navigation -->
   <header>
     <nav>
       <ul>
+        <li><a href="accueil.html" class="logo-link">
+          <img src="images/logo.jpg" alt="Logo Localia" />
+        </a></li>
         <li><a href="accueil.html">Accueil</a></li>
-        <li><a href="about.html">About us</a></li>
-        <li><a href="produits.html">Produits</a></li>
-        <li><a href="panier.html">Panier</a></li>
+        <li><a href="about.html">A propos</a></li>
+        <li><a href="login.html" id="login-link">Se connecter</a></li>
+        <li><a href="#" id="logout-link" style="display: none;">Se déconnecter</a></li>
+        <li><a href="panier.html" id="panier-link" style="display: none;">Panier</a></li>
       </ul>
     </nav>
   </header>
@@ -23,7 +27,6 @@
   <section class="hero">
     <div class="hero-content">
       <h1>Des produits faits mains écologiques et durables</h1>
-      <p>Découvrez des créations artisanales et respectueuses de l'environnement</p>
       <a href="produits.html" class="btn-primary">Découvrir nos produits</a>
     </div>
   </section>
@@ -33,10 +36,10 @@
     <h2>Nos Partenaires</h2>
     <p>Nos partenaires partagent notre engagement pour l'artisanat durable et respectueux de la nature.</p>
     <div class="partenaires-logos">
-      <img src="logo-bookers.png" alt="Bookers" class="logo">
-      <img src="logo-leaf-hotels.png" alt="Leaf Hotels" class="logo">
-      <img src="logo-ecoliday.png" alt="Ecoliday" class="logo">
-      <img src="logo-naturloop.png" alt="Naturloop" class="logo">
+      <img src="images/logo bookers.webp" alt="Bookers" class="logo">
+      <img src="images/logo hotels.png" alt="Leaf Hotels" class="logo">
+      <img src="images/logo ecoliday.png" alt="Ecoliday" class="logo">
+      <img src="images/logo naturloop.jpeg" alt="Naturloop" class="logo">
     </div>
   </section>
 
@@ -47,14 +50,26 @@
     <div class="produits-cards">
       <!-- Exemple de carte produit -->
       <div class="produit-card">
-        <img src="artisanat-textile.jpg" alt="Artisanat textile">
+        <img src="images/Artisanat.png" alt="Artisanat textile">
         <div class="produit-card-content">
           <h3>Artisanat textile</h3>
-          <p>Reconnectez-vous à la nature avec nos produits</p>
-          <a href="produits.html" class="btn">Voir plus</a>
         </div>
       </div>
       <!-- Ajouter d'autres cartes ici -->
+       <!-- Exemple de carte produit -->
+      <div class="produit-card">
+        <img src="images/ChatGPT Image 7 avr. 2025 à 13_34_26.png" alt="Artisanat textile">
+        <div class="produit-card-content">
+          <h3>Décoration intérieure</h3>
+        </div>
+      </div>
+      <!-- Exemple de carte produit -->
+      <div class="produit-card">
+        <img src="images/beautiful-still-life-with-herbal-medicine.jpg" alt="Médecine">
+        <div class="produit-card-content">
+          <h3>Médecine</h3>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -64,7 +79,6 @@
     <p>Des créations artisanales pour ceux qui cherchent la simplicité et le respect de l'environnement.</p>
     <div class="explore-btns">
       <a href="produits.html" class="btn-primary">Découvrir nos produits</a>
-      <a href="offres-speciales.html" class="btn-secondary">Offres spéciales</a>
     </div>
   </section>
 
@@ -73,9 +87,9 @@
     <h2>Nos certifications</h2>
     <p>Certifiés éco-responsables, nous garantissons des produits respectueux de l'environnement à chaque étape de leur création.</p>
     <div class="certification-logos">
-      <img src="green-energy-logo.png" alt="Green Energy" class="certification-logo">
-      <img src="100-ecology-logo.png" alt="100% Ecology" class="certification-logo">
-      <img src="green-energy-seal.png" alt="Green Energy Seal" class="certification-logo">
+      <img src="images/Capture d’écran 2025-04-07 à 14.43.45.png" alt="Green Energy" class="certification-logo">
+      <img src="images/Capture d’écran 2025-04-07 à 14.43.36.png" alt="100% Ecology" class="certification-logo">
+      <img src="images/Capture d’écran 2025-04-07 à 14.43.30.png" alt="Green Energy Seal" class="certification-logo">
     </div>
   </section>
 
@@ -104,12 +118,40 @@
     </div>
 
     <div class="contact-image">
-      <img src="lake-house.jpg" alt="Image de maison près du lac">
+      <img src="images/realistic-water-drop-with-ecosystem.jpg" alt="Image de maison près du lac">
     </div>
   </section>
 
   <footer>
     <p>&copy; 2025 Localia. Tous droits réservés.</p>
   </footer>
+  <script>
+fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      const loginLink = document.getElementById('login-link');
+      const logoutLink = document.getElementById('logout-link');
+      const panierLink = document.getElementById('panier-link');
+
+      if (data.connected) {
+        if (loginLink) loginLink.style.display = 'none';
+        if (logoutLink) logoutLink.style.display = 'inline-block';
+        if (panierLink) panierLink.style.display = 'inline-block';
+      } else {
+        if (loginLink) loginLink.style.display = 'inline-block';
+        if (logoutLink) logoutLink.style.display = 'none';
+        if (panierLink) panierLink.style.display = 'none';
+      }
+    });
+
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', async () => {
+      await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+      window.location.href = 'login.html';
+    });
+  }
+  </script>
+  
 </body>
 </html>
