@@ -158,13 +158,25 @@ app.post('/api/panier', (req, res) => {
     return res.status(400).json({ success: false, message: 'ID produit manquant.' });
   }
 
-  const sql = 'INSERT INTO panier (id_client, id_produit) VALUES (?, ?)';
-  db.query(sql, [id_client, id_produit], (err, result) => {
-    if (err) {
-      console.error('Erreur lors de l\'ajout au panier :', err);
-      return res.status(500).json({ success: false, message: 'Erreur lors de l\'ajout au panier.' });
+  // 1. Récupérer l'id_panier du client
+  const sqlPanier = 'SELECT id_panier FROM panier WHERE id_client = ?';
+  db.query(sqlPanier, [id_client], (err, rows) => {
+    if (err || rows.length === 0) {
+      return res.status(500).json({ success: false, message: 'Impossible de récupérer le panier client.' });
     }
-    res.json({ success: true, message: 'Produit ajouté au panier avec succès.' });
+
+    const id_panier = rows[0].id_panier;
+
+    // 2. Ajouter à la table HAS
+    const sqlAdd = 'INSERT INTO has (id_panier, id_produit, quantity) VALUES (?, ?, 1)';
+    db.query(sqlAdd, [id_panier, id_produit], (err, result) => {
+      if (err) {
+        console.error('Erreur lors de l\'ajout au panier (table has) :', err);
+        return res.status(500).json({ success: false, message: 'Erreur lors de l\'ajout du produit.' });
+      }
+
+      res.json({ success: true, message: 'Produit ajouté au panier !' });
+    });
   });
 });
 // Lancer le serveur
