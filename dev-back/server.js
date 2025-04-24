@@ -133,7 +133,40 @@ app.get('/api/user', (req, res) => {
     res.json({ connected: false });
   }
 });
+// API : Récupérer tous les produits
+app.get('/api/products', (req, res) => {
+  const sql = 'SELECT * FROM product';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des produits :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur' });
+    }
+    res.json({ success: true, products: results });
+  });
+});
 
+// API : Ajouter un produit au panier
+app.post('/api/panier', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ success: false, message: 'Vous n\'êtes pas connecté à un compte client.' });
+  }
+
+  const { id_produit } = req.body;
+  const id_client = req.session.user.id;
+
+  if (!id_produit) {
+    return res.status(400).json({ success: false, message: 'ID produit manquant.' });
+  }
+
+  const sql = 'INSERT INTO panier (id_client, id_produit) VALUES (?, ?)';
+  db.query(sql, [id_client, id_produit], (err, result) => {
+    if (err) {
+      console.error('Erreur lors de l\'ajout au panier :', err);
+      return res.status(500).json({ success: false, message: 'Erreur lors de l\'ajout au panier.' });
+    }
+    res.json({ success: true, message: 'Produit ajouté au panier avec succès.' });
+  });
+});
 // Lancer le serveur
 app.listen(PORT, () => {
   console.log(`✅ Serveur lancé sur http://localhost:${PORT}`);
