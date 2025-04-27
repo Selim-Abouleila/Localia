@@ -93,7 +93,7 @@
 
   <script>
     async function chargerPanier() {
-      const res = await fetch('http://localhost:3000/api/panier', { credentials: 'include' });
+      const res = await fetch('https://localia-production.up.railway.app/api/panier', { credentials: 'include' });
       const data = await res.json();
 
       const contenu = document.getElementById('contenu-panier');
@@ -127,7 +127,7 @@
     }
 
     async function supprimerDuPanier(id_produit) {
-      const res = await fetch(`http://localhost:3000/api/panier/${id_produit}`, {
+      const res = await fetch(`https://localia-production.up.railway.app/api/panier/${id_produit}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -137,7 +137,7 @@
     }
 
     // Authentification : afficher/hide les liens
-    fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    fetch('https://localia-production.up.railway.app/api/user', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         const loginLink = document.getElementById('login-link');
@@ -157,7 +157,7 @@
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
       logoutLink.addEventListener('click', async () => {
-        await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+        await fetch('https://localia-production.up.railway.app/api/logout', { credentials: 'include' });
         window.location.href = 'login.html';
       });
     }
@@ -165,7 +165,7 @@
   const confirmé = confirm("Confirmez-vous la validation de votre commande ?");
   if (!confirmé) return;
 
-  const res = await fetch('http://localhost:3000/api/commande', {
+  const res = await fetch('https://localia-production.up.railway.app/api/commande', {
     method: 'POST',
     credentials: 'include'
   });
