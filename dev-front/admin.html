@@ -143,7 +143,7 @@
 
 <script>
   // Sécurité affichage
-  fetch('http://localhost:3000/api/user', { credentials: 'include' })
+  fetch('https://localia-production.up.railway.app/api/user', { credentials: 'include' })
     .then(res => res.json())
     .then(data => {
       const loginLink = document.getElementById('login-link');
@@ -165,7 +165,7 @@
   const logoutLink = document.getElementById('logout-link');
   if (logoutLink) {
     logoutLink.addEventListener('click', async () => {
-      await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+      await fetch('https://localia-production.up.railway.app/api/logout', { credentials: 'include' });
       window.location.href = 'login.html';
     });
   }
@@ -176,7 +176,7 @@
 
   // Charger tous les produits dans les menus déroulants
   async function chargerProduits() {
-    const res = await fetch('http://localhost:3000/api/products');
+    const res = await fetch('https://localia-production.up.railway.app/api/products');
     const data = await res.json();
     if (data.success) {
       const selectModifier = document.getElementById('produit-modifier');
@@ -202,7 +202,7 @@
     stock: parseInt(document.getElementById('stock-ajouter').value, 10)
   };
 
-  const res = await fetch('http://localhost:3000/api/admin/product', {
+  const res = await fetch('https://localia-production.up.railway.app/api/admin/product', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -227,7 +227,7 @@ document.getElementById('form-modifier').addEventListener('submit', async (e) =>
     price: document.getElementById('prix-modifier').value ? parseFloat(document.getElementById('prix-modifier').value) : null
   };
 
-  const res = await fetch(`http://localhost:3000/api/admin/product/${id}`, {
+  const res = await fetch(`https://localia-production.up.railway.app/api/admin/product/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -246,7 +246,7 @@ document.getElementById('form-stock').addEventListener('submit', async (e) => {
   const id = document.getElementById('produit-stock').value;
   const quantite = parseInt(document.getElementById('quantite-stock').value, 10);
 
-  const res = await fetch(`http://localhost:3000/api/admin/stock/${id}`, {
+  const res = await fetch(`https://localia-production.up.railway.app/api/admin/stock/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -267,7 +267,7 @@ document.getElementById('form-supprimer').addEventListener('submit', async (e) =
   const confirmation = confirm("Es-tu sûr de vouloir supprimer ce produit ? Cette action est irréversible !");
   if (!confirmation) return;
 
-  const res = await fetch(`http://localhost:3000/api/admin/product/${id}`, {
+  const res = await fetch(`https://localia-production.up.railway.app/api/admin/product/${id}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include'
