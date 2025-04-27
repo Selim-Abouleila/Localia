@@ -166,7 +166,7 @@
           <tbody>
             ${cmd.produits.map(p => `
               <tr>
-                <td>${p.nom}</td>
+                <td>${p.nom ? p.nom : 'Produit supprimé'}</td>
                 <td>${p.quantity}</td>
                 <td>${Number(p.prix).toFixed(2)} €</td>
                 <td>${Number(p.total).toFixed(2)} €</td>

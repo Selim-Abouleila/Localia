@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Localia</title>
+  <link rel="stylesheet" href="html.css">
+  <style>
+    .admin-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .admin-section {
+      margin-bottom: 40px;
+    }
+    .admin-section h2 {
+      color: #2e8b57;
+      margin-bottom: 15px;
+    }
+    .admin-section form {
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-section form input {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .admin-section form button {
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .admin-section form button:hover {
+      background-color: #276849;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <ul>
+      <li><a href="accueil.html" class="logo-link"><img src="images/logo.jpg" alt="Logo Localia"></a></li>
+      <li><a href="accueil.html">Accueil</a></li>
+      <li><a href="about.html">À propos</a></li>
+      <li><a href="login.html" id="login-link">Se connecter</a></li>
+      <li><a href="#" id="logout-link" style="display: none;">Se déconnecter</a></li>
+    </ul>
+    <div class="dropdown-menu-wrapper" id="menu-droite" style="display: none;">
+      <button class="dropdown-toggle">⋮</button>
+      <div class="dropdown-content">
+        <a href="panier.html">Consulter mon panier</a>
+        <a href="historique.html">Consulter l'historique des commandes</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Bandeau admin -->
+<div id="admin-banner" style="display: none; background-color: #ffcc00; color: #333; text-align: center; padding: 10px; font-weight: bold;">
+  👑 Bienvenue Admin 👑
+</div>
+
+<main class="admin-container">
+  <h1 style="text-align: center; color: #2e8b57;">Gestion Administrateur</h1>
+
+  <!-- Ajouter produit -->
+  <section class="admin-section">
+    <h2>➕ Ajouter un produit</h2>
+    <form id="form-ajouter">
+      <input type="text" id="nom-ajouter" placeholder="Nom du produit" required>
+      <input type="text" id="description-ajouter" placeholder="Description" required>
+      <input type="text" id="type-ajouter" placeholder="Type" required>
+      <input type="number" id="prix-ajouter" placeholder="Prix (€)" required>
+      <input type="number" id="stock-ajouter" placeholder="Stock initial" required>
+      <button type="submit">Ajouter produit</button>
+    </form>
+  </section>
+
+  <!-- Modifier produit -->
+  <section class="admin-section">
+    <h2>✏️ Modifier un produit</h2>
+    <form id="form-modifier">
+      <input type="number" id="id-modifier" placeholder="ID du produit" required>
+      <input type="text" id="nom-modifier" placeholder="Nouveau nom">
+      <input type="text" id="description-modifier" placeholder="Nouvelle description">
+      <input type="text" id="type-modifier" placeholder="Nouveau type">
+      <input type="number" id="prix-modifier" placeholder="Nouveau prix (€)">
+      <button type="submit">Modifier produit</button>
+    </form>
+  </section>
+
+  <!-- Supprimer produit -->
+  <section class="admin-section">
+    <h2>➖ Supprimer un produit</h2>
+    <form id="form-supprimer">
+      <input type="number" id="id-supprimer" placeholder="ID du produit" required>
+      <button type="submit" style="background-color: #c62828;">Supprimer produit</button>
+    </form>
+  </section>
+
+  <!-- Augmenter stock -->
+  <section class="admin-section">
+    <h2>📦 Augmenter le stock d'un produit</h2>
+    <form id="form-stock">
+      <input type="number" id="id-stock" placeholder="ID du produit" required>
+      <input type="number" id="quantite-stock" placeholder="Quantité à ajouter" required>
+      <button type="submit">Augmenter stock</button>
+    </form>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Localia. Tous droits réservés.</p>
+</footer>
+
+<script>
+  // Sécurité affichage
+  fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      const loginLink = document.getElementById('login-link');
+      const logoutLink = document.getElementById('logout-link');
+      const menuDroite = document.getElementById('menu-droite');
+      const adminBanner = document.getElementById('admin-banner');
+
+      if (data.connected && data.user.role === 'admin') {
+        if (loginLink) loginLink.style.display = 'none';
+        if (logoutLink) logoutLink.style.display = 'inline-block';
+        if (menuDroite) menuDroite.style.display = 'inline-block';
+        if (adminBanner) adminBanner.style.display = 'block';
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', async () => {
+      await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+      window.location.href = 'login.html';
+    });
+  }
+
+  document.querySelector('.dropdown-toggle')?.addEventListener('click', () => {
+    document.querySelector('.dropdown-content').classList.toggle('active');
+  });
+
+  // (Le JS pour appeler le backend sera ajouté après que tu me dises GO pour le backend 🚀)
+</script>
+
+</body>
+</html>
