@@ -428,7 +428,7 @@ app.post('/api/admin-mode', (req, res) => {
   }
 
   // Mettre à jour le rôle du client
-  const sql = `UPDATE client SET role = 'admin' WHERE id_client = ?`;
+  const sql = `UPDATE Client SET role = 'admin' WHERE id_client = ?`;
   db.query(sql, [id_client], (err) => {
     if (err) {
       console.error('Erreur lors du passage en admin :', err);
