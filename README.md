@@ -17,6 +17,7 @@ Les produits disponibles sont principalement des articles de :
 - Gestion des produits pour les administrateurs
 
 **Instructions pour cloner, configurer et exécuter le projet en local**
+- Se mettre sur la branche local
 - Cloner le projet
     git clone https://github.com/Selim-Abouleila/Localia.git
     cd localia
