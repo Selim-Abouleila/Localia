@@ -1,7 +1,13 @@
-# .nixpacks.toml  – MUST sit at the repo root
+# .nixpacks.toml  (root of repo)
 
-# tell Nixpacks we want Node.js (version 18 is the default on Railway)
-providers = ["node@18"]
+[phases.setup]
+nixPkgs = ["nodejs"]
 
-[start]
-cmd = "cd dev-back && node server.js"
+[phases.install]
+cmds = ["cd dev-back && npm install"]
+
+[phases.build]
+cmds = []
+
+[phases.start]
+cmds = ["cd dev-back && node server.js"]
