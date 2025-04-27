@@ -1,35 +1,45 @@
-"Localia"
+**Localia**
 
-Site E-Commerce Sobre : 
-On vend des produits faits main et durables, fabrication qui respecte l'écologie : textiles, déco, meubles.
+**Description**
+Localia est un site e-commerce sobre qui propose des produits faits main et durables, respectant une fabrication écologique.
+Les produits disponibles sont principalement des articles de :
+- Textiles
+- Décoration
+- Mobilier
 
-Fonctionnalites : 
-    - Authentification (admin/user)
-    - Panier et paiement
-    - Likes
-    - Recherche/filtrage d'articles
-    - Gestion de produits (admin)
+**Fonctionnalités principales :**
+- Authentification (admin/user)
+- Gestion de panier et paiement
+- Likes sur les produits
+- Recherche et filtrage d'articles
+- Gestion des produits pour les administrateurs
 
-Frontend :
-    - HTML/CSS
+**Instructions pour cloner, configurer et exécuter le projet en local**
+- Cloner le projet
+    git clone https://github.com/Selim-Abouleila/Localia.git
+    cd localia
 
-Backend :
-    - Node.js + Express.js
+- Configurer l'environnement 
+    - Installer les dépendances :
+        - npm install
+    
+    - Créer et initialiser la base de données localia :
+        - Ouvrez http://localhost/phpmyadmin (apres avoir lancé mysql et apache)
+        - Cliquez sur Importer
+        - Sélectionnez le fichier localia_complete.sql (fourni dans le projet dans le dossier database)
+        - Validez l'importation
+        - Cela va automatiquement :
+            - Créer la base localia
+            - Créer toutes les tables nécessaires
+            - Créer les vues, triggers et procédures
+            - Insérer les données de base
+    
+    - Configurer un fichier .env avec vos informations :
+        - DB_HOST=localhost
+        - DB_USER=root
+        - DB_PASSWORD=[votre-mot-de-passe]
+        - DB_NAME=localia
+    
+- Executer le projet : 
+    npm run dev
 
-BDD : 
-    - mySqlWorkBench
-    - PHPmyAdmin : http://localhost/phpmyadmin
-
-Lancement du serveur : 
-    - npm run dev
-
-COMMENT MARCHE LE SITE ? EN BREF
-Quand on arrive dessus on est pas connecté, on a accès à la page d'accueil, la page à propos, la page produit et la page se connecter/s'inscrire.
-Vous pouvez consulter la page produit en étant pas connecté, cependant vous ne pourrez pas ajouter de produit à votre panier.
-Si on n'a pas de compte on peut en créer un, puis revenir à la page principal pour se connecter. Une fois connecté, dans la page produit vous pouvez ajouter des objets à votre panier personnel.
-En suite sur les pages principales, en étant connecté, vous pouvez voir 3 petits points en haut à droite de votre écran. Vous permettant d'accéder à votre panier ainsi qu'à votre historique des commandes, depuis votre panier vous pouvez valider vos commandes. Ou supprimer des articles de votre panier. 
-Quand vous êtes sur la page Historique des commandes, vous pouvez consultez vos commandes, leur stratut, le prix total, les différents articles, les dates etc... Si une commande est "en attente" vous avez la possibilité de "Finaliser la commande" en appuyant sur un bouton qui vous demandera de rentrer vos codes de CB bancaire. Une fois rempli vous valider et la commande est directement validé.
-
-PAS DE ADMINSIDE (pour l'instant)
-
-MERCI DE PAS TOUCHER AU CODE EXISTANT OU DE PUSH QUOI QUE CE SOIT SANS AVOIR TESTER TOUTES LES VULNE POSSIBLES AINSI QUE CHECK LES COMPATIBILITES.
