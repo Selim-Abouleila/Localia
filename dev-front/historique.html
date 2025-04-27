@@ -112,7 +112,7 @@
   </footer>
 
   <script>
-    fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    fetch('https://localia-production.up.railway.app/api/user', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         const loginLink = document.getElementById('login-link');
@@ -130,7 +130,7 @@
       });
 
     async function chargerCommandes() {
-      const res = await fetch('http://localhost:3000/api/commandes', { credentials: 'include' });
+      const res = await fetch('https://localia-production.up.railway.app/api/commandes', { credentials: 'include' });
       const data = await res.json();
 
       const conteneur = document.getElementById('historique');
@@ -209,7 +209,7 @@
           });
 
           form.querySelector('button').addEventListener('click', async () => {
-            const res = await fetch(`http://localhost:3000/api/commande/${cmd.id_commande}/valider`, {
+            const res = await fetch(`https://localia-production.up.railway.app/api/commande/${cmd.id_commande}/valider`, {
               method: 'POST',
               credentials: 'include'
             });
@@ -226,7 +226,7 @@
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
       logoutLink.addEventListener('click', async () => {
-        await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+        await fetch('https://localia-production.up.railway.app/api/logout', { credentials: 'include' });
         window.location.href = 'login.html';
       });
     }
