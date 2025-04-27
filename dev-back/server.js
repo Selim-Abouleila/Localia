@@ -441,6 +441,181 @@ app.post('/api/admin-mode', (req, res) => {
     res.json({ success: true, message: 'Vous êtes maintenant en mode admin ✅' });
   });
 });
+// Ajouter un produit (admin)
+app.post('/api/admin/product', (req, res) => {
+  const { product_name, product_description, product_type, price, stock } = req.body;
+
+  // Vérifications de base
+  if (!product_name || !product_description || !product_type || price == null || stock == null) {
+    return res.status(400).json({ success: false, message: 'Tous les champs doivent être remplis.' });
+  }
+
+  if (price < 0 || stock < 0) {
+    return res.status(400).json({ success: false, message: 'Le prix et le stock doivent être positifs.' });
+  }
+
+  // Vérification du type
+  const allowedTypes = ['textile', 'decor', 'furniture'];
+  if (!allowedTypes.includes(product_type)) {
+    return res.status(400).json({ success: false, message: 'Type de produit invalide.' });
+  }
+
+  // Insertion dans 'product'
+  const sqlProduct = `INSERT INTO product (product_name, product_description, product_type, price) VALUES (?, ?, ?, ?)`;
+  db.query(sqlProduct, [product_name, product_description, product_type, price], (err, result) => {
+    if (err) {
+      console.error('Erreur lors de l\'insertion du produit :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur lors de l\'ajout du produit.' });
+    }
+
+    const newProductId = result.insertId; // Récupérer l'id_produit inséré
+
+    // Insertion du stock initial dans 'inventory'
+    const sqlInventory = `INSERT INTO inventory (id_produit, stock) VALUES (?, ?)`;
+    db.query(sqlInventory, [newProductId, stock], (err2) => {
+      if (err2) {
+        console.error('Erreur lors de l\'insertion du stock :', err2);
+        return res.status(500).json({ success: false, message: 'Erreur serveur lors de l\'ajout du stock.' });
+      }
+
+      res.json({ success: true, message: 'Produit ajouté avec succès ✅' });
+    });
+  });
+});
+// Modifier un produit (admin)
+app.put('/api/admin/product/:id', (req, res) => {
+  const { id } = req.params;
+  const { product_name, product_description, product_type, price } = req.body;
+
+  // Vérifications
+  if (!id) {
+    return res.status(400).json({ success: false, message: 'ID produit manquant.' });
+  }
+
+  const updates = [];
+  const values = [];
+
+  if (product_name) {
+    updates.push('product_name = ?');
+    values.push(product_name);
+  }
+  if (product_description) {
+    updates.push('product_description = ?');
+    values.push(product_description);
+  }
+  if (product_type) {
+    const allowedTypes = ['textile', 'decor', 'furniture'];
+    if (!allowedTypes.includes(product_type)) {
+      return res.status(400).json({ success: false, message: 'Type de produit invalide.' });
+    }
+    updates.push('product_type = ?');
+    values.push(product_type);
+  }
+  if (price != null) {
+    if (price < 0) {
+      return res.status(400).json({ success: false, message: 'Prix invalide.' });
+    }
+    updates.push('price = ?');
+    values.push(price);
+  }
+
+  if (updates.length === 0) {
+    return res.status(400).json({ success: false, message: 'Aucune donnée à mettre à jour.' });
+  }
+
+  const sql = `UPDATE product SET ${updates.join(', ')} WHERE id_produit = ?`;
+  values.push(id);
+
+  db.query(sql, values, (err) => {
+    if (err) {
+      console.error('Erreur lors de la modification du produit :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur lors de la modification.' });
+    }
+
+    res.json({ success: true, message: 'Produit modifié avec succès ✅' });
+  });
+});
+// Augmenter le stock d'un produit (admin)
+app.put('/api/admin/stock/:id', (req, res) => {
+  const { id } = req.params;
+  const { quantite } = req.body;
+
+  if (!id || quantite == null) {
+    return res.status(400).json({ success: false, message: 'ID produit ou quantité manquante.' });
+  }
+
+  if (quantite <= 0) {
+    return res.status(400).json({ success: false, message: 'La quantité à ajouter doit être positive.' });
+  }
+
+  const sql = `UPDATE inventory SET stock = stock + ? WHERE id_produit = ?`;
+  db.query(sql, [quantite, id], (err, result) => {
+    if (err) {
+      console.error('Erreur lors de l\'augmentation du stock :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: 'Produit introuvable.' });
+    }
+
+    res.json({ success: true, message: 'Stock augmenté avec succès ✅' });
+  });
+});
+// Supprimer un produit (admin) sécurisé
+app.delete('/api/admin/product/:id', (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ success: false, message: 'ID produit manquant.' });
+  }
+
+  // 1. Vérifier s'il existe dans involves
+  const sqlCheckInvolves = `SELECT * FROM involves WHERE id_produit = ? LIMIT 1`;
+  db.query(sqlCheckInvolves, [id], (errCheck, rows) => {
+    if (errCheck) {
+      console.error('Erreur lors de la vérification dans involves :', errCheck);
+      return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+    }
+
+    if (rows.length > 0) {
+      return res.status(400).json({ success: false, message: 'Impossible de supprimer : produit lié à des commandes existantes.' });
+    }
+
+    // 2. Supprimer dans has (panier)
+    const sqlDeleteHas = `DELETE FROM has WHERE id_produit = ?`;
+    db.query(sqlDeleteHas, [id], (err1) => {
+      if (err1) {
+        console.error('Erreur suppression dans has :', err1);
+        return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+      }
+
+      // 3. Supprimer dans inventory
+      const sqlDeleteInventory = `DELETE FROM inventory WHERE id_produit = ?`;
+      db.query(sqlDeleteInventory, [id], (err2) => {
+        if (err2) {
+          console.error('Erreur suppression dans inventory :', err2);
+          return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+        }
+
+        // 4. Supprimer dans product
+        const sqlDeleteProduct = `DELETE FROM product WHERE id_produit = ?`;
+        db.query(sqlDeleteProduct, [id], (err3, result) => {
+          if (err3) {
+            console.error('Erreur suppression dans product :', err3);
+            return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+          }
+
+          if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Produit introuvable.' });
+          }
+
+          res.json({ success: true, message: 'Produit supprimé avec succès ✅' });
+        });
+      });
+    });
+  });
+});
 
 // Lancer le serveur
 app.listen(PORT, () => {

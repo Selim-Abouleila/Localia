@@ -25,7 +25,7 @@
       display: flex;
       flex-direction: column;
     }
-    .admin-section form input {
+    .admin-section form input, .admin-section form select {
       margin-bottom: 10px;
       padding: 10px;
       border: 1px solid #ccc;
@@ -80,9 +80,14 @@
     <form id="form-ajouter">
       <input type="text" id="nom-ajouter" placeholder="Nom du produit" required>
       <input type="text" id="description-ajouter" placeholder="Description" required>
-      <input type="text" id="type-ajouter" placeholder="Type" required>
-      <input type="number" id="prix-ajouter" placeholder="Prix (€)" required>
-      <input type="number" id="stock-ajouter" placeholder="Stock initial" required>
+      <select id="type-ajouter" required>
+        <option value="">-- Choisir un type --</option>
+        <option value="textile">textile</option>
+        <option value="decor">decor</option>
+        <option value="furniture">furniture</option>
+      </select>
+      <input type="number" id="prix-ajouter" placeholder="Prix (€)" min="0" step="0.01" required>
+      <input type="number" id="stock-ajouter" placeholder="Stock initial" min="0" step="1" required>
       <button type="submit">Ajouter produit</button>
     </form>
   </section>
@@ -91,11 +96,18 @@
   <section class="admin-section">
     <h2>✏️ Modifier un produit</h2>
     <form id="form-modifier">
-      <input type="number" id="id-modifier" placeholder="ID du produit" required>
+      <select id="produit-modifier" required>
+        <option value="">-- Sélectionner un produit --</option>
+      </select>
       <input type="text" id="nom-modifier" placeholder="Nouveau nom">
       <input type="text" id="description-modifier" placeholder="Nouvelle description">
-      <input type="text" id="type-modifier" placeholder="Nouveau type">
-      <input type="number" id="prix-modifier" placeholder="Nouveau prix (€)">
+      <select id="type-modifier">
+        <option value="">-- Choisir un type --</option>
+        <option value="textile">textile</option>
+        <option value="decor">decor</option>
+        <option value="furniture">furniture</option>
+      </select>
+      <input type="number" id="prix-modifier" placeholder="Nouveau prix (€)" min="0" step="0.01">
       <button type="submit">Modifier produit</button>
     </form>
   </section>
@@ -104,7 +116,9 @@
   <section class="admin-section">
     <h2>➖ Supprimer un produit</h2>
     <form id="form-supprimer">
-      <input type="number" id="id-supprimer" placeholder="ID du produit" required>
+      <select id="produit-supprimer" required>
+        <option value="">-- Sélectionner un produit --</option>
+      </select>
       <button type="submit" style="background-color: #c62828;">Supprimer produit</button>
     </form>
   </section>
@@ -113,8 +127,10 @@
   <section class="admin-section">
     <h2>📦 Augmenter le stock d'un produit</h2>
     <form id="form-stock">
-      <input type="number" id="id-stock" placeholder="ID du produit" required>
-      <input type="number" id="quantite-stock" placeholder="Quantité à ajouter" required>
+      <select id="produit-stock" required>
+        <option value="">-- Sélectionner un produit --</option>
+      </select>
+      <input type="number" id="quantite-stock" placeholder="Quantité à ajouter" min="1" step="1" required>
       <button type="submit">Augmenter stock</button>
     </form>
   </section>
@@ -140,6 +156,7 @@
         if (logoutLink) logoutLink.style.display = 'inline-block';
         if (menuDroite) menuDroite.style.display = 'inline-block';
         if (adminBanner) adminBanner.style.display = 'block';
+        chargerProduits();
       } else {
         window.location.href = 'login.html';
       }
@@ -157,7 +174,115 @@
     document.querySelector('.dropdown-content').classList.toggle('active');
   });
 
-  // (Le JS pour appeler le backend sera ajouté après que tu me dises GO pour le backend 🚀)
+  // Charger tous les produits dans les menus déroulants
+  async function chargerProduits() {
+    const res = await fetch('http://localhost:3000/api/products');
+    const data = await res.json();
+    if (data.success) {
+      const selectModifier = document.getElementById('produit-modifier');
+      const selectSupprimer = document.getElementById('produit-supprimer');
+      const selectStock = document.getElementById('produit-stock');
+
+      data.products.forEach(p => {
+        const option = `<option value="${p.id_produit}">${p.id_produit} - ${p.product_name}</option>`;
+        selectModifier.innerHTML += option;
+        selectSupprimer.innerHTML += option;
+        selectStock.innerHTML += option;
+      });
+    }
+  }
+  document.getElementById('form-ajouter').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const product = {
+    product_name: document.getElementById('nom-ajouter').value.trim(),
+    product_description: document.getElementById('description-ajouter').value.trim(),
+    product_type: document.getElementById('type-ajouter').value,
+    price: parseFloat(document.getElementById('prix-ajouter').value),
+    stock: parseInt(document.getElementById('stock-ajouter').value, 10)
+  };
+
+  const res = await fetch('http://localhost:3000/api/admin/product', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(product)
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  if (data.success) {
+    window.location.reload();
+  }
+});
+document.getElementById('form-modifier').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById('produit-modifier').value;
+
+  const updates = {
+    product_name: document.getElementById('nom-modifier').value.trim(),
+    product_description: document.getElementById('description-modifier').value.trim(),
+    product_type: document.getElementById('type-modifier').value,
+    price: document.getElementById('prix-modifier').value ? parseFloat(document.getElementById('prix-modifier').value) : null
+  };
+
+  const res = await fetch(`http://localhost:3000/api/admin/product/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(updates)
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  if (data.success) {
+    window.location.reload();
+  }
+});
+document.getElementById('form-stock').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById('produit-stock').value;
+  const quantite = parseInt(document.getElementById('quantite-stock').value, 10);
+
+  const res = await fetch(`http://localhost:3000/api/admin/stock/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ quantite })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+  if (data.success) {
+    window.location.reload();
+  }
+});
+document.getElementById('form-supprimer').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById('produit-supprimer').value;
+
+  const confirmation = confirm("Es-tu sûr de vouloir supprimer ce produit ? Cette action est irréversible !");
+  if (!confirmation) return;
+
+  const res = await fetch(`http://localhost:3000/api/admin/product/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert('Produit supprimé avec succès ✅');
+    window.location.reload();
+  } else {
+    alert('⚠️ Suppression impossible : ' + data.message);
+  }
+});
+
 </script>
 
 </body>
