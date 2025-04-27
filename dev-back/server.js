@@ -413,6 +413,34 @@ app.post('/api/commande/:id/valider', (req, res) => {
     });
   });
 });
+// API : Passer en mode admin
+app.post('/api/admin-mode', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ success: false, message: 'Non connecté.' });
+  }
+
+  const id_client = req.session.user.id;
+  const { code } = req.body;
+
+  // Vérifier le code secret
+  if (code !== 'localiaAdmin') {
+    return res.status(403).json({ success: false, message: 'Code incorrect.' });
+  }
+
+  // Mettre à jour le rôle du client
+  const sql = `UPDATE client SET role = 'admin' WHERE id_client = ?`;
+  db.query(sql, [id_client], (err) => {
+    if (err) {
+      console.error('Erreur lors du passage en admin :', err);
+      return res.status(500).json({ success: false, message: 'Erreur serveur.' });
+    }
+
+    // Mettre à jour la session aussi !
+    req.session.user.role = 'admin';
+
+    res.json({ success: true, message: 'Vous êtes maintenant en mode admin ✅' });
+  });
+});
 
 // Lancer le serveur
 app.listen(PORT, () => {
