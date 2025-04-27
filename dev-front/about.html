@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A propos - Localia</title>
+  <title>À propos - Localia</title>
   <link rel="stylesheet" href="html.css">
   <style>
     .faq-section {
@@ -40,13 +40,14 @@
   </style>
 </head>
 <body>
-  <!-- Barre de navigation -->
+
+  <!-- Navigation -->
   <header>
     <nav>
       <ul>
         <li><a href="accueil.html" class="logo-link"><img src="images/logo.jpg" alt="Logo Localia"></a></li>
         <li><a href="accueil.html">Accueil</a></li>
-        <li><a href="about.html">A propos</a></li>
+        <li><a href="about.html">À propos</a></li>
         <li><a href="login.html" id="login-link">Se connecter</a></li>
         <li><a href="#" id="logout-link" style="display: none;">Se déconnecter</a></li>
       </ul>
@@ -55,10 +56,16 @@
         <div class="dropdown-content">
           <a href="panier.html">Consulter mon panier</a>
           <a href="historique.html">Consulter l'historique des commandes</a>
+          <a href="#" id="admin-mode-link" style="display: none;">Passer en mode admin</a>
         </div>
       </div>
     </nav>
   </header>
+
+  <!-- Bandeau admin -->
+  <div id="admin-banner" style="display: none; background-color: #ffcc00; color: #333; text-align: center; padding: 10px; font-weight: bold;">
+    👑 Bienvenue Admin 👑
+  </div>
 
   <!-- Section Hero -->
   <section class="hero">
@@ -68,7 +75,7 @@
     </div>
   </section>
 
-  <!-- À propos de nous -->
+  <!-- Notre mission -->
   <section class="produits-selection">
     <h2>Notre mission</h2>
     <p>Chez Localia, nous croyons en une consommation plus responsable. Nous proposons des produits faits main, durables et respectueux de l'environnement : textiles, décoration, mobilier. Notre but ? Réduire l'empreinte écologique tout en soutenant les artisans locaux.</p>
@@ -85,8 +92,8 @@
         <div class="produit-card-content"><h3>Samy</h3></div>
       </div>
       <div class="produit-card">
-        <img src="images/yael.jpeg" alt="Yael">
-        <div class="produit-card-content"><h3>Yael</h3></div>
+        <img src="images/yael.jpeg" alt="Yaël">
+        <div class="produit-card-content"><h3>Yaël</h3></div>
       </div>
       <div class="produit-card">
         <img src="images/alban.jpg" alt="Alban">
@@ -103,7 +110,7 @@
     </div>
   </section>
 
-  <!-- Section FAQ -->
+  <!-- FAQ -->
   <section class="faq-section">
     <h2>FAQ - Questions fréquentes</h2>
     <div class="faq-item">
@@ -112,23 +119,24 @@
     </div>
     <div class="faq-item">
       <div class="faq-question">Comment garantissez-vous l'aspect écologique ?</div>
-      <div class="faq-answer">Nos produits sont issus de matériaux recyclés ou naturels, fabriqués localement par des artisans engagés. Nous limitons également les emballages plastiques.</div>
+      <div class="faq-answer">Nos produits sont issus de matériaux recyclés ou naturels, fabriqués localement par des artisans engagés.</div>
     </div>
     <div class="faq-item">
       <div class="faq-question">Puis-je retourner un produit ?</div>
-      <div class="faq-answer">Oui, vous avez 14 jours pour changer d'avis. Contactez notre service client pour plus de détails.</div>
+      <div class="faq-answer">Oui, vous avez 14 jours pour changer d'avis. Contactez notre service client.</div>
     </div>
     <div class="faq-item">
       <div class="faq-question">Livrez-vous partout en France ?</div>
-      <div class="faq-answer">Absolument ! Nous livrons dans toute la France métropolitaine, et travaillons à étendre nos livraisons à l'Europe prochainement.</div>
+      <div class="faq-answer">Oui, nous livrons dans toute la France métropolitaine.</div>
     </div>
   </section>
 
-  <!-- Pied de page -->
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Localia. Tous droits réservés.</p>
   </footer>
 
+  <!-- Scripts -->
   <script>
     // Déroulement des FAQ
     document.querySelectorAll('.faq-question').forEach(item => {
@@ -137,26 +145,34 @@
         answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
       });
     });
-  
-    // Affichage/connexion
+
+    // Affichage / gestion admin
     fetch('http://localhost:3000/api/user', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         const loginLink = document.getElementById('login-link');
         const logoutLink = document.getElementById('logout-link');
         const menuDroite = document.getElementById('menu-droite');
-  
+        const adminModeLink = document.getElementById('admin-mode-link');
+        const adminBanner = document.getElementById('admin-banner');
+
         if (data.connected) {
           if (loginLink) loginLink.style.display = 'none';
           if (logoutLink) logoutLink.style.display = 'inline-block';
           if (menuDroite) menuDroite.style.display = 'inline-block';
+
+          if (data.user.role !== 'admin') {
+            if (adminModeLink) adminModeLink.style.display = 'block';
+          } else {
+            if (adminBanner) adminBanner.style.display = 'block';
+          }
         } else {
           if (loginLink) loginLink.style.display = 'inline-block';
           if (logoutLink) logoutLink.style.display = 'none';
           if (menuDroite) menuDroite.style.display = 'none';
         }
       });
-  
+
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
       logoutLink.addEventListener('click', async () => {
@@ -164,12 +180,34 @@
         window.location.href = 'login.html';
       });
     }
-  
-    // Toggle du menu déroulant
+
+    // Gestion admin mode
+    const adminModeLink = document.getElementById('admin-mode-link');
+    if (adminModeLink) {
+      adminModeLink.addEventListener('click', async () => {
+        const code = prompt('Entrez le code admin pour passer en mode administrateur :');
+        if (!code) return;
+
+        const res = await fetch('http://localhost:3000/api/admin-mode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ code })
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+        if (data.success) {
+          window.location.reload();
+        }
+      });
+    }
+
     document.querySelector('.dropdown-toggle')?.addEventListener('click', () => {
-      const content = document.querySelector('.dropdown-content');
-      content.classList.toggle('active');
+      document.querySelector('.dropdown-content').classList.toggle('active');
     });
   </script>
+
 </body>
 </html>
