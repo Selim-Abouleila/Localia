@@ -41,5 +41,24 @@ Les produits disponibles sont principalement des articles de :
         - DB_NAME=localia
     
 - Executer le projet : 
-    npm run dev
+    - cd dev-back
+    - node server.js
+ 
+- Le serveur sera accessible sur : http://localhost:3000
 
+**Brève description des différentes parties du site :**
+Le site Localia se compose de trois parties principales :
+
+- Une page d'accueil (accueil.html) qui introduit le site, présente son concept, propose de contacter le support et de découvrir les produits vendus.
+- Une page login/register (login.html et register.html) permettant aux utilisateurs de créer un compte ou de se connecter.
+- Une page à propos (about.html) expliquant notre mission écologique, nos engagements et présentant notre équipe.
+- Structure technique du projet :
+    - dev-front/
+        - Contient l'interface utilisateur du site avec les fichiers HTML, CSS et les images nécessaires.
+    - dev-back/
+        - Contient le serveur Node.js utilisant Express.js, avec :
+        - Authentification utilisateur (sessions)
+        - Gestion des produits, panier, commandes
+        - Connexion et interaction avec la base de données MySQL
+    - database/
+        - Contient le fichier localia_complete.sql permettant de créer et initialiser toute la base de données : tables, vues, procédures, triggers             et données de base.
