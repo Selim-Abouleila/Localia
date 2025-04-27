@@ -148,7 +148,7 @@
     });
 
     // Affichage / gestion admin
-    fetch('http://localhost:3000/api/user', { credentials: 'include' })
+    fetch('https://localia-production.up.railway.app/api/user', { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
   const loginLink = document.getElementById('login-link');
@@ -179,7 +179,7 @@
     const logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
       logoutLink.addEventListener('click', async () => {
-        await fetch('http://localhost:3000/api/logout', { credentials: 'include' });
+        await fetch('https://localia-production.up.railway.app/api/logout', { credentials: 'include' });
         window.location.href = 'login.html';
       });
     }
