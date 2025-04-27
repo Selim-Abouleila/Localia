@@ -52,6 +52,12 @@ Le site Localia se compose de trois parties principales :
 - Une page d'accueil (accueil.html) qui introduit le site, présente son concept, propose de contacter le support et de découvrir les produits vendus.
 - Une page login/register (login.html et register.html) permettant aux utilisateurs de créer un compte ou de se connecter.
 - Une page à propos (about.html) expliquant notre mission écologique, nos engagements et présentant notre équipe.
+- Une page d'administration (admin.html) accessible uniquement aux administrateurs, permettant :
+    - D'ajouter de nouveaux produits
+    - De modifier les informations des produits existants
+    - De supprimer un produit du catalogue (si non lié à des commandes)
+    - D'augmenter dynamiquement les stocks
+- Une fichier sitemap (sitemap.xml) qui référence toutes les principales pages du site pour faciliter l'indexation par les moteurs de recherche et contribuer à limiter les requêtes inutiles, dans une démarche éco-responsable. 
 - Structure technique du projet :
     - dev-front/
         - Contient l'interface utilisateur du site avec les fichiers HTML, CSS et les images nécessaires.
