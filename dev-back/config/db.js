@@ -2,8 +2,8 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
 
-
-const db = mysql.createConnection(process.env.Connect);
+// 
+const db = mysql.createConnection(process.env['MySQL-sCOX.MYSQL_URL']);
 
 db.connect((err) => {
   if (err) {
