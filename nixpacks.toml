@@ -8,4 +8,4 @@ cmds = ["cd dev-back && npm install"]
 cmds = []
 
 [phases.start]
-cmd = "cd dev-back && node server.js"
+cmds = ["cd dev-back && node server.js"]
