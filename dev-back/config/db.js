@@ -2,17 +2,12 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// 👉 This is your full Railway URL saved in an env variable (for example DATABASE_URL)
-const DATABASE_URL = process.env.Connect; // or whatever your var is called
-const dbUrl = new URL(DATABASE_URL);
-
-// 👉 Parse it manually
 const db = mysql.createConnection({
-  host: dbUrl.hostname,
-  user: dbUrl.username,
-  password: dbUrl.password,
-  database: dbUrl.pathname.substring(1), // remove the starting "/"
-  port: dbUrl.port,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT, // <- 👈 Ajout essentiel
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS, // <- attention : dans .env c'est DB_PASS, pas DB_PASSWORD
+  database: process.env.DB_NAME
 });
 
 db.connect((err) => {
