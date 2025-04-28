@@ -73,7 +73,7 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-  background-image: url('images/sunny-landscape-with-windmills.jpg'); /* Remplace par l'image de fond souhaitée */
+  background-image: url('images/sunny.webp'); /* Remplace par l'image de fond souhaitée */
   background-size: cover;
   background-position: center;
   color: white;
