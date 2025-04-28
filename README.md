@@ -1,7 +1,3 @@
-**Localia**
-https://localia-production.up.railway.app
-
-
 **Description**
 Localia est un site e-commerce sobre qui propose des produits faits main et durables, respectant une fabrication écologique.
 Les produits disponibles sont principalement des articles de :
@@ -16,11 +12,14 @@ Les produits disponibles sont principalement des articles de :
 - Recherche et filtrage d'articles
 - Gestion des produits pour les administrateurs
 
+**Pour lancer le site directement, sans passer en local :**
+- https://localia-production.up.railway.app/accueil.html
+
 **Instructions pour cloner, configurer et exécuter le projet en local**
 - Se mettre sur la branche local
 - Cloner le projet
-    git clone https://github.com/Selim-Abouleila/Localia.git
-    cd localia
+    - git clone https://github.com/Selim-Abouleila/Localia.git
+    - cd localia
 
 - Configurer l'environnement 
     - Installer les dépendances :
@@ -70,4 +69,4 @@ Le site Localia se compose de trois parties principales :
         - Gestion des produits, panier, commandes
         - Connexion et interaction avec la base de données MySQL
     - database/
-        - Contient le fichier localia_complete.sql permettant de créer et initialiser toute la base de données : tables, vues, procédures, triggers             et données de base.
+        - Contient le fichier localia_complete.sql permettant de créer et initialiser toute la base de données : tables, vues, procédures, triggers et données de base.
