@@ -68,7 +68,7 @@
   <header>
     <nav>
       <ul>
-        <li><a href="accueil.html" class="logo-link"><img src="images/logo.jpg" alt="Logo Localia"></a></li>
+        <li><a href="accueil.html" class="logo-link"><img src="images/logo.webp" alt="Logo Localia" loading="lazy"></a></li>
         <li><a href="accueil.html">Accueil</a></li>
         <li><a href="about.html">A propos</a></li>
         <li><a href="login.html" id="login-link">Se connecter</a></li>
@@ -98,11 +98,11 @@
 
     function getImageByType(type) {
       const images = {
-        textile: 'images/Artisanat.png',
-        decor: 'images/ChatGPT Image 7 avr. 2025 à 13_34_26.png',
-        furniture: 'images/interior-decor-furniture-inspired-by-fruits-vegetables.jpg'
+        textile: 'images/Artisanat.webp',
+        decor: 'images/ChatGPT Image 7 avr. 2025 à 13_34_26.webp',
+        furniture: 'images/interior-decor-furniture-inspired-by-fruits-vegetables.webp'
       };
-      return images[type] || 'images/default.jpg';
+      return images[type] || 'images/default.webp';
     }
 
     function afficherProduits(produits) {
