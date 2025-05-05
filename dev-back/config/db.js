@@ -1,21 +1,21 @@
+// database.js
 const mysql = require('mysql2');
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT, // <- 👈 Ajout essentiel
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS, // <- attention : dans .env c'est DB_PASS, pas DB_PASSWORD
-  database: process.env.DB_NAME
+const pool = mysql.createPool({
+  host            : process.env.DB_HOST,
+  port            : process.env.DB_PORT,
+  user            : process.env.DB_USER,
+  password        : process.env.DB_PASSWORD,
+  database        : process.env.DB_NAME,
+  waitForConnections : true,
+  connectionLimit    : 10,
+  queueLimit         : 0
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('❌ Erreur de connexion à MySQL :', err);
-  } else {
-    console.log('✅ Connecté à la base de données MySQL');
-  }
-});
-
-module.exports = db;
+// Now export exactly the same interface your routes expect:
+module.exports = {
+  query: (...args) => pool.query(...args),
+  // if you ever need to get a raw connection:
+  getConnection: (...args) => pool.getConnection(...args),
+};

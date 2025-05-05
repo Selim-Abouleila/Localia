@@ -29,6 +29,15 @@ app.use(session({
   }
 }));
 
+db.getConnection((err, conn) => {
+  if (err) {
+    console.error('❌ Unable to reach database:', err);
+    process.exit(1);
+  }
+  console.log('✅ Database is reachable');
+  conn.release();  // return to the pool
+});
+
 // Servir les fichiers HTML statiques depuis dev-front
 app.use(express.static(path.join(__dirname, '../dev-front')));
 
